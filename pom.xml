@@ -11,7 +11,7 @@
 	<packaging>hpi</packaging>
 	<version>0.1-SNAPSHOT</version>
 	<name>Jigomerge plugin</name>
-	<url>http://wiki.jenkins-ci.org/display/HUDSON/Jigomerge+Plugin</url>
+	<url>http://wiki.jenkins-ci.org/display/JENKINS/Jigomerge+Plugin</url>
 
 	<developers>
 		<developer>
@@ -27,18 +27,5 @@
 			<version>1.2</version>
 		</dependency>
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>jenkins</id>
-			<url>http://maven.jenkins-ci.org:8081/content/repositories/releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 </project>
