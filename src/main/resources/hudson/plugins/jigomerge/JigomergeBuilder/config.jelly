@@ -8,10 +8,18 @@
     <f:entry title="password" help="${rootURL}/plugin/jigomerge/help-builder-password.html">
         <f:password field="password" clazz="required" checkMessage="${%mandatory.password}"/>
     </f:entry>
-    <f:entry title="oneByOne" help="${rootURL}/plugin/jigomerge/help-builder-oneByOne.html">
-        <f:checkbox field="oneByOne" />
+    <f:entry title="validation script" help="${rootURL}/plugin/jigomerge/help-builder-validation-script.html">
+        <f:textbox field="validationScript" />
     </f:entry>
-    <f:entry title="eager" help="${rootURL}/plugin/jigomerge/help-builder-eager.html">
-        <f:checkbox field="eager" />
-    </f:entry>
+    
+    <f:section title="Advanced Options">
+  		<f:advanced>
+    		<f:entry title="one by one" help="${rootURL}/plugin/jigomerge/help-builder-oneByOne.html">
+        		<f:checkbox field="oneByOne" />
+    		</f:entry>
+    		<f:entry title="eager mode" help="${rootURL}/plugin/jigomerge/help-builder-eager.html">
+        		<f:checkbox field="eager" />
+    		</f:entry>
+  		</f:advanced>
+	</f:section>
 </j:jelly>

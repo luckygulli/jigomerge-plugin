@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class JigomergeBuilder extends Builder {
@@ -33,19 +34,21 @@ public class JigomergeBuilder extends Builder {
 	private final String password;
 	private final boolean oneByOne;
 	private final boolean eager;
-
-	private String validationScript = null;
+	private String validationScript;
 
 	private boolean dryRun = false;
 	private boolean verbose = true;
 
 	@DataBoundConstructor
-	public JigomergeBuilder(String source, String username, String password, boolean oneByOne, boolean eager) {
+	public JigomergeBuilder(String source, String username, String password, boolean oneByOne, boolean eager, String validationScript) {
 		this.source = source;
 		this.username = username;
 		this.password = password;
 		this.oneByOne = oneByOne;
 		this.eager = eager;
+		if(StringUtils.isNotEmpty(validationScript)){
+			this.validationScript = validationScript;
+		}
 	}
 
 	@Override
