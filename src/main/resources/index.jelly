@@ -4,5 +4,5 @@
   Since we don't really have anything dynamic here, let's just use static HTML. 
 -->
 <div>
-  This plug-in integrates <a href="http://code.google.com/p/jigomerge/">Jigomerge</a> to handle merge between SVN(Subversion) branches.
+This plug-in integrates <a href="http://code.google.com/p/jigomerge/">Jigomerge</a> to handle merge between SVN(Subversion) branches.
 </div>

@@ -34,7 +34,7 @@ public class JigomergeBuilder extends Builder {
 	private final String password;
 	private final boolean oneByOne;
 	private final boolean eager;
-	private String validationScript;
+	private final String validationScript;
 
 	private boolean dryRun = false;
 	private boolean verbose = true;
@@ -48,6 +48,8 @@ public class JigomergeBuilder extends Builder {
 		this.eager = eager;
 		if(StringUtils.isNotEmpty(validationScript)){
 			this.validationScript = validationScript;
+		}else{
+			this.validationScript = null;
 		}
 	}
 
@@ -113,4 +115,8 @@ public class JigomergeBuilder extends Builder {
 	public boolean isEager() {
 		return eager;
 	}
+
+	public String getValidationScript() {
+    	return validationScript;
+    }
 }
