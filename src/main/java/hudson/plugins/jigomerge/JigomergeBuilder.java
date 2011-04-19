@@ -4,14 +4,12 @@ import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.XmlFile;
 import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
 import hudson.model.Descriptor;
 import hudson.tasks.Builder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -75,7 +73,7 @@ public class JigomergeBuilder extends Builder {
 			GroovyObject instance = (GroovyObject) constructors[0].newInstance(dryRun, Collections.EMPTY_LIST, oneByOne, eager,
 			        verbose, username, password, listener.getLogger());
 
-			Object[] mergeArgs = { source, validationScript, workingDirectory };
+			Object[] mergeArgs = { source, validationScript, workingDirectory + '.'};
 			Map returnedObject = (Map) instance.invokeMethod("launchSvnMerge", mergeArgs);
 			listener.getLogger().println("return : " + returnedObject);
 
