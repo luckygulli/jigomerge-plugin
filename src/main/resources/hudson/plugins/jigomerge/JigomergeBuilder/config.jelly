@@ -20,6 +20,12 @@
     		<f:entry title="eager mode" help="${rootURL}/plugin/jigomerge/help-builder-eager.html">
         		<f:checkbox field="eager" />
     		</f:entry>
+    		<f:entry title="dry run" help="${rootURL}/plugin/jigomerge/help-builder-dryRun.html">
+        		<f:checkbox field="dryRun" />
+    		</f:entry>
+    		<f:entry title="verbose" help="${rootURL}/plugin/jigomerge/help-builder-verbose.html">
+        		<f:checkbox field="verbose" />
+    		</f:entry>
   		</f:advanced>
 	</f:section>
 </j:jelly>

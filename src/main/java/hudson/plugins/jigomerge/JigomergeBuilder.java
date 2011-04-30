@@ -32,18 +32,19 @@ public class JigomergeBuilder extends Builder {
 	private final String password;
 	private final boolean oneByOne;
 	private final boolean eager;
+	private boolean dryRun;
+	private boolean verbose;
 	private final String validationScript;
 
-	private boolean dryRun = false;
-	private boolean verbose = true;
-
 	@DataBoundConstructor
-	public JigomergeBuilder(String source, String username, String password, boolean oneByOne, boolean eager, String validationScript) {
+	public JigomergeBuilder(String source, String username, String password, boolean oneByOne, boolean eager, String validationScript, boolean dryRun, boolean verbose) {
 		this.source = source;
 		this.username = username;
 		this.password = password;
 		this.oneByOne = oneByOne;
 		this.eager = eager;
+		this.dryRun = dryRun;
+		this.verbose = verbose;
 		if(StringUtils.isNotEmpty(validationScript)){
 			this.validationScript = validationScript;
 		}else{
@@ -112,6 +113,14 @@ public class JigomergeBuilder extends Builder {
 
 	public boolean isEager() {
 		return eager;
+	}
+
+	public boolean isDryRun() {
+		return dryRun;
+	}
+
+	public boolean isVerbose() {
+		return verbose;
 	}
 
 	public String getValidationScript() {
