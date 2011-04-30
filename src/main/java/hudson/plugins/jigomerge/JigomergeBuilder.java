@@ -4,18 +4,19 @@ import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
 import hudson.model.Descriptor;
 import hudson.tasks.Builder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -35,9 +36,12 @@ public class JigomergeBuilder extends Builder {
 	private boolean dryRun;
 	private boolean verbose;
 	private final String validationScript;
+	private final List<String> ignoreMergePatterns;
 
 	@DataBoundConstructor
-	public JigomergeBuilder(String source, String username, String password, boolean oneByOne, boolean eager, String validationScript, boolean dryRun, boolean verbose) {
+	public JigomergeBuilder(String source, String username, String password,
+			boolean oneByOne, boolean eager, String validationScript,
+			boolean dryRun, boolean verbose, String ignoreMergePatterns) {
 		this.source = source;
 		this.username = username;
 		this.password = password;
@@ -45,10 +49,19 @@ public class JigomergeBuilder extends Builder {
 		this.eager = eager;
 		this.dryRun = dryRun;
 		this.verbose = verbose;
-		if(StringUtils.isNotEmpty(validationScript)){
+
+		if (StringUtils.isNotEmpty(validationScript)) {
 			this.validationScript = validationScript;
-		}else{
+		} else {
 			this.validationScript = null;
+		}
+
+		this.ignoreMergePatterns = new ArrayList<String>();
+		if (StringUtils.isNotEmpty(ignoreMergePatterns)) {
+			StringTokenizer tokenizer = new StringTokenizer(ignoreMergePatterns, ",");
+			while (tokenizer.hasMoreTokens()) {
+				this.ignoreMergePatterns.add(tokenizer.nextToken());
+			}
 		}
 	}
 
@@ -58,8 +71,9 @@ public class JigomergeBuilder extends Builder {
 	}
 
 	@Override
-	public boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener)
-	        throws InterruptedException, IOException {
+	public boolean perform(final AbstractBuild<?, ?> build,
+			final Launcher launcher, final BuildListener listener)
+			throws InterruptedException, IOException {
 		String workingDirectory = build.getModuleRoot().toURI().getPath();
 
 		MergeResult result = new MergeResult();
@@ -67,20 +81,24 @@ public class JigomergeBuilder extends Builder {
 
 		try {
 			InputStream scriptResource = this.getClass().getResourceAsStream(
-			        "/scripts/jigomerge-" + JIGOMERGE_VERSION + ".groovy");
+					"/scripts/jigomerge-" + JIGOMERGE_VERSION + ".groovy");
 			GroovyClassLoader gcl = new GroovyClassLoader();
 			Class<?> clazz = gcl.parseClass(scriptResource);
 			Constructor<?>[] constructors = clazz.getConstructors();
-			GroovyObject instance = (GroovyObject) constructors[0].newInstance(dryRun, Collections.EMPTY_LIST, oneByOne, eager,
-			        verbose, username, password, listener.getLogger());
+			GroovyObject instance = (GroovyObject) constructors[0].newInstance(
+					dryRun, ignoreMergePatterns, oneByOne, eager, verbose,
+					username, password, listener.getLogger());
 
-			Object[] mergeArgs = { source, validationScript, workingDirectory + '.'};
-			Map returnedObject = (Map) instance.invokeMethod("launchSvnMerge", mergeArgs);
+			Object[] mergeArgs = { source, validationScript,
+					workingDirectory + '.' };
+			Map returnedObject = (Map) instance.invokeMethod("launchSvnMerge",
+					mergeArgs);
 			listener.getLogger().println("return : " + returnedObject);
 
 			// fill merge result
 			result.setStatus((Boolean) returnedObject.get("status"));
-			List<String> conflictingRevisions = (List<String>) returnedObject.get("conflictingRevisions");
+			List<String> conflictingRevisions = (List<String>) returnedObject
+					.get("conflictingRevisions");
 			if (conflictingRevisions != null) {
 				result.getConflictingRevisions().addAll(conflictingRevisions);
 			}
@@ -124,6 +142,11 @@ public class JigomergeBuilder extends Builder {
 	}
 
 	public String getValidationScript() {
-    	return validationScript;
-    }
+		return validationScript;
+	}
+
+	public String getIgnoreMergePatterns() {
+		return StringUtils.join(ignoreMergePatterns.toArray(), ",");
+	}
+
 }

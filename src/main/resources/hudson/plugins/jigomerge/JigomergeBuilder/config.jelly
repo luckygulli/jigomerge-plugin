@@ -20,6 +20,9 @@
     		<f:entry title="eager mode" help="${rootURL}/plugin/jigomerge/help-builder-eager.html">
         		<f:checkbox field="eager" />
     		</f:entry>
+    		<f:entry title="ignore merge patterns" help="${rootURL}/plugin/jigomerge/help-builder-ignoreMergePatterns.html">
+        		<f:textbox field="ignoreMergePatterns" />
+    		</f:entry>
     		<f:entry title="dry run" help="${rootURL}/plugin/jigomerge/help-builder-dryRun.html">
         		<f:checkbox field="dryRun" />
     		</f:entry>
