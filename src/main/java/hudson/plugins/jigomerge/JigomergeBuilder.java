@@ -91,7 +91,7 @@ public class JigomergeBuilder extends Builder {
 					username, password, listener.getLogger());
 
 			Object[] mergeArgs = { source, validationScript,
-					"\"" + workingDirectory + ".\"" };
+					"" + workingDirectory + "." };
 			Map returnedObject = (Map) instance.invokeMethod("launchSvnMerge",
 					mergeArgs);
 			listener.getLogger().println("return : " + returnedObject);
