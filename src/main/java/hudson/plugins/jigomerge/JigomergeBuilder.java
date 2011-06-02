@@ -8,6 +8,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
+import hudson.model.Result;
 import hudson.tasks.Builder;
 
 import java.io.IOException;
@@ -101,16 +102,18 @@ public class JigomergeBuilder extends Builder {
 					.get("conflictingRevisions");
 			if (conflictingRevisions != null) {
 				result.getConflictingRevisions().addAll(conflictingRevisions);
+				build.setResult(Result.UNSTABLE);
 			}
 
 		} catch (Exception e) {
 			listener.getLogger().println(e.getClass() + " # " + e.getMessage());
+			build.setResult(Result.FAILURE);
 		}
 
 		Action action = new JigomergeBuildAction(build, result, listener);
 		build.addAction(action);
 
-		return result.isStatus();
+		return true;
 	}
 
 	public String getSource() {
