@@ -108,6 +108,7 @@ public class JigomergeBuilder extends Builder {
 		} catch (Exception e) {
 			listener.getLogger().println(e.getClass() + " # " + e.getMessage());
 			build.setResult(Result.FAILURE);
+			e.printStackTrace(listener.getLogger());
 		}
 
 		Action action = new JigomergeBuildAction(build, result, listener);
