@@ -29,6 +29,9 @@
     		<f:entry title="verbose" help="${rootURL}/plugin/jigomerge/help-builder-verbose.html">
         		<f:checkbox field="verbose" />
     		</f:entry>
+    		<f:entry title="commit comment prefix" help="${rootURL}/plugin/jigomerge/help-builder-commit-comment-prefix.html">
+        		<f:textbox field="commitCommentPrefix" />
+    		</f:entry>
   		</f:advanced>
 	</f:section>
 </j:jelly>

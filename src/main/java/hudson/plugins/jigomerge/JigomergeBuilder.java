@@ -27,7 +27,7 @@ public class JigomergeBuilder extends Builder {
 	@Extension
 	public static final JigomergeBuildDescriptor DESCRIPTOR = new JigomergeBuildDescriptor();
 
-	private static final String JIGOMERGE_VERSION = "2.2.5";
+	private static final String JIGOMERGE_VERSION = "2.2.6";
 
 	private final String source;
 	private final String username;
@@ -38,11 +38,12 @@ public class JigomergeBuilder extends Builder {
 	private boolean verbose;
 	private final String validationScript;
 	private final List<String> ignoreMergePatterns;
+	private String commitCommentPrefix;
 
 	@DataBoundConstructor
 	public JigomergeBuilder(String source, String username, String password,
 			boolean oneByOne, boolean eager, String validationScript,
-			boolean dryRun, boolean verbose, String ignoreMergePatterns) {
+			boolean dryRun, boolean verbose, String ignoreMergePatterns, String commitCommentPrefix) {
 		this.source = source;
 		this.username = username;
 		this.password = password;
@@ -63,6 +64,11 @@ public class JigomergeBuilder extends Builder {
 			while (tokenizer.hasMoreTokens()) {
 				this.ignoreMergePatterns.add(tokenizer.nextToken());
 			}
+		}
+		
+		this.commitCommentPrefix = "";
+		if(StringUtils.isNotEmpty(commitCommentPrefix)){
+			this.commitCommentPrefix = commitCommentPrefix;
 		}
 	}
 
@@ -88,7 +94,7 @@ public class JigomergeBuilder extends Builder {
 			Constructor<?>[] constructors = clazz.getConstructors();
 			GroovyObject instance = (GroovyObject) constructors[0].newInstance(
 					dryRun, ignoreMergePatterns, oneByOne, eager, verbose,
-					username, password, listener.getLogger());
+					username, password, listener.getLogger(), commitCommentPrefix);
 
 			Object[] mergeArgs = { source, validationScript,
 					"" + workingDirectory + "." };
@@ -100,7 +106,7 @@ public class JigomergeBuilder extends Builder {
 			result.setStatus((Boolean) returnedObject.get("status"));
 			List<String> conflictingRevisions = (List<String>) returnedObject
 					.get("conflictingRevisions");
-			if (conflictingRevisions != null) {
+			if (conflictingRevisions != null && !conflictingRevisions.isEmpty()) {
 				result.getConflictingRevisions().addAll(conflictingRevisions);
 				build.setResult(Result.UNSTABLE);
 			}
@@ -151,6 +157,10 @@ public class JigomergeBuilder extends Builder {
 
 	public String getIgnoreMergePatterns() {
 		return StringUtils.join(ignoreMergePatterns.toArray(), ",");
+	}
+
+	public String getCommitCommentPrefix() {
+		return commitCommentPrefix;
 	}
 
 }
