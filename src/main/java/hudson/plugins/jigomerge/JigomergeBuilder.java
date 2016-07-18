@@ -27,7 +27,7 @@ public class JigomergeBuilder extends Builder {
 	@Extension
 	public static final JigomergeBuildDescriptor DESCRIPTOR = new JigomergeBuildDescriptor();
 
-	private static final String JIGOMERGE_VERSION = "2.2.7";
+	private static final String JIGOMERGE_VERSION = "2.2.6";
 	private static final String JIGOMERGE_CLASSNAME = "SvnMergeTool";
 
 	private final String source;
